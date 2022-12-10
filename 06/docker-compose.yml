@@ -1,0 +1,27 @@
+version: '3.9'
+
+networks:
+  fcgi_network:
+    external: true
+
+
+services:
+  fcgi:
+    image: fcgi_hello:local
+    volumes:
+      - ./fcgi_nginx/:/etc/nginx/
+    container_name: fcgi_hello_serv
+    networks:
+      fcgi_network:
+        ipv4_address: 172.20.0.2
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx/:/etc/nginx/
+    container_name: nginx_serv
+    networks:
+      fcgi_network:
+        ipv4_address: 172.20.0.3
+    ports:
+      - "80:8080"
